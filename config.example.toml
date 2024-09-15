@@ -2,5 +2,5 @@
 
 [llm]
 model='llama3.1'
-sys_prompt='You are a helpful assistant, make sure to respectfully answer the user's questions.'
+sys_prompt='You are a helpful assistant, make sure to respectfully answer the users questions.'
 message_history_path='messages.json'
