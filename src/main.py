@@ -1,13 +1,11 @@
 import logging
 import classes.stt as stt
 import classes.llm as llm
-import speech_recognition as sr
 
 
 def main():
     LOGGER = logging.getLogger(__name__)
     logging.basicConfig(level=logging.INFO)
-    
     
     STT = stt.SpeechToText()
     LLM = llm.LLM()
@@ -19,7 +17,7 @@ def main():
     while True:
         try:
             text = STT.transcribe(duration=3)
-        except sr.exceptions.UnknownValueError as e:
+        except Exception as e:
             LOGGER.error('Could not transcribe speech: %s', e)
             continue
         LLM._ask(prompt=text)
