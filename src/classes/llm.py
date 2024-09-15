@@ -9,7 +9,6 @@ class LLM:
         self.model = config['llm']['model']
         self.message_history_path = config['llm']['message_history_path']
         self.sys_prompt = config['llm']['sys_prompt']
-
         self.logger = logging.getLogger(__name__)
         self.message_history = self._load_message_history()
         self.logger.debug(f"Initial message history loaded: {self.message_history}")
