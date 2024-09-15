@@ -38,3 +38,5 @@ If you don't have it installed, download it from [here](https://ollama.com/).
 - [x] Start with modular architecture
 - [x] Record Speech from microphone
 - [x] Make request to local OLLAMA API
+- [ ] Put answers in a JSON response
+  - [ ] Parse and performing the specific action with defined parameters
