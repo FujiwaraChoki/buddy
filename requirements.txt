@@ -1,0 +1,7 @@
+speechrecognition
+setuptools
+soundfile
+pyaudio
+ollama
+torch
+numpy

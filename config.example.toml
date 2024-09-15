@@ -1,0 +1,6 @@
+# Configuration for Coding Buddy.
+
+[llm]
+model='llama3.1'
+sys_prompt='You are a helpful assistant, make sure to respectfully answer the user's questions.'
+message_history_path='messages.json'
