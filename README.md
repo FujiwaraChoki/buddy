@@ -33,8 +33,8 @@ ollama --version
 
 If you don't have it installed, download it from [here](https://ollama.com/).
 
-## Plan
+## ToDo
 
 - [x] Start with modular architecture
 - [x] Record Speech from microphone
-- [ ] Make request to local OLLAMA API
+- [x] Make request to local OLLAMA API
