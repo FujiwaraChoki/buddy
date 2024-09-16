@@ -3,6 +3,8 @@ import classes.stt as stt
 import classes.llm as llm
 import classes.parser as parser
 
+from actions import *
+
 ACTIONS = ['git', 'files', 'run', 'test', 'install', 'help', 'refactor', 'debug', 'other']
 LOGGER = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -50,23 +52,23 @@ def executor(action, commands):
         return
 
     if action == 'git':
-        pass
+        git.call(commands)
     elif action == 'files':
-        pass
+        files.call(commands)
     elif action == 'run':
-        pass
+        run.call(commands)
     elif action == 'test':
-        pass
+        test.call(commands)
     elif action == 'install':
-        pass
+        install.call(commands)
     elif action == 'help':
-        pass
+        help.call(commands)
     elif action == 'refactor':
-        pass
+        refactor.call(commands)
     elif action == 'debug':
-        pass
+        debug.call(commands)
     elif action == 'other':
-        pass
+        other.call(commands)
     else:
         LOGGER.error('Invalid action: %s', action)
         return
@@ -74,5 +76,3 @@ def executor(action, commands):
 
 if __name__ == '__main__':
     main()
-
-
