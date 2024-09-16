@@ -3,10 +3,12 @@ import classes.stt as stt
 import classes.llm as llm
 import classes.parser as parser
 
-def main():
-    LOGGER = logging.getLogger(__name__)
-    logging.basicConfig(level=logging.INFO)
+ACTIONS = ['git', 'files', 'run', 'test', 'install', 'help', 'refactor', 'debug', 'other']
+LOGGER = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
+
+def main():
     STT = stt.SpeechToText()
     LLM = llm.LLM()
     PARSER = parser.Parser()
@@ -42,5 +44,35 @@ def main():
             LOGGER.info('Exiting...')
             break
 
+def executor(action, commands):
+    if action not in ACTIONS:
+        LOGGER.error('Invalid action: %s', action)
+        return
+
+    if action == 'git':
+        pass
+    elif action == 'files':
+        pass
+    elif action == 'run':
+        pass
+    elif action == 'test':
+        pass
+    elif action == 'install':
+        pass
+    elif action == 'help':
+        pass
+    elif action == 'refactor':
+        pass
+    elif action == 'debug':
+        pass
+    elif action == 'other':
+        pass
+    else:
+        LOGGER.error('Invalid action: %s', action)
+        return
+
+
 if __name__ == '__main__':
     main()
+
+
