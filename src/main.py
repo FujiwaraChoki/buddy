@@ -6,7 +6,7 @@ import classes.parser as parser
 def main():
     LOGGER = logging.getLogger(__name__)
     logging.basicConfig(level=logging.INFO)
-    
+
     STT = stt.SpeechToText()
     LLM = llm.LLM()
     PARSER = parser.Parser()
@@ -26,18 +26,18 @@ def main():
         if not response:
             LOGGER.error('No response generated. Please try again.')
             continue
-        
+
         LOGGER.info('Response: %s', response)
         parsed_response = PARSER.parse(response)
-        
+
         if not parsed_response:
             LOGGER.error('Failed to parse response. Please try again.')
             continue
-        
+
         action, commands = parsed_response
         LOGGER.info('Action: %s', action)
         LOGGER.info('Commands: %s', commands)
-        
+
         if action == 'exit':
             LOGGER.info('Exiting...')
             break

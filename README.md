@@ -33,6 +33,14 @@ ollama --version
 
 If you don't have it installed, download it from [here](https://ollama.com/).
 
+Next, you'll need to set your project through the command line tool.
+
+```bash
+python3 src/set_project.py [PROJECT_PATH]
+```
+
+`[PROJECT_PATH]` is the path to your project. You can also provide a relative path, as it will be converted into an absolute one in all cases.
+
 ## ToDo
 
 - [x] Start with modular architecture
@@ -40,3 +48,15 @@ If you don't have it installed, download it from [here](https://ollama.com/).
 - [x] Make request to local OLLAMA API
 - [ ] Put answers in a JSON response
   - [ ] Parse and performing the specific action with defined parameters
+
+## How it works
+
+First, the user tells his concern about his code.
+
+Then, buddy goes through the following steps:
+
+1. Let user set current project through CLI
+2. Record voice
+3. Split into action and commands
+    - Possible Actions: [`git`, `files`, `run`, `test`, `install`, `help`, `refactor`, `debug`, `other`]
+    - Possible Commands: [Specific to the action]
