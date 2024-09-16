@@ -1,4 +1,4 @@
-# TEST ACTION
+# OTHER ACTION
 
 import os
 import cv2
@@ -11,4 +11,4 @@ from PIL import Image
 
 
 def call(commands):
-    print(f'in the test commands: {commands}')
+    print(f'in the other commands: {commands}')

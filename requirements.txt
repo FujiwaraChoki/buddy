@@ -1,7 +1,10 @@
 speechrecognition
+opencv-python
 setuptools
+pyautogui
 soundfile
 pyaudio
+Pillow
 ollama
 torch
 numpy
