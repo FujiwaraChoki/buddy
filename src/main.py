@@ -2,6 +2,7 @@ import logging
 import classes.stt as stt
 import classes.llm as llm
 import classes.parser as parser
+import actions.refactor as refactor
 
 def main():
     LOGGER = logging.getLogger(__name__)
@@ -38,7 +39,9 @@ def main():
         LOGGER.info('Action: %s', action)
         LOGGER.info('Commands: %s', commands)
 
-        if action == 'exit':
+        if action == 'refactor':
+            refactor.call(llm=LLM)
+        elif action == 'exit':
             LOGGER.info('Exiting...')
             break
 

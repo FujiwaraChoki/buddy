@@ -8,21 +8,16 @@ class Parser:
         
     def parse(self, text: str):
         self._logger.info('Parsing LLM\'s response...')
+        print(text)
         
         to_json = json.loads(text)
         
-        action = to_json.get('action')
-        commands = to_json.get('commands')
-        
-        if not action:
-            self._logger.error('No action found in response.')
-            return
-        
-        if not commands:
-            self._logger.error('No commands found in response.')
-            return
+        print(to_json)
         
         self._logger.info('Response parsed successfully.')
+        
+        action = to_json.get("action")
+        commands = to_json.get("commands")
         
         return action, commands
         
