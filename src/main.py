@@ -22,7 +22,7 @@ def main():
         except Exception as e:
             LOGGER.error('Could not transcribe speech: %s', e)
             continue
-        response = LLM._ask(prompt=text)
+        response = LLM.ask(prompt=text, save=True)
 
         if not response:
             LOGGER.error('No response generated. Please try again.')
@@ -38,9 +38,11 @@ def main():
         action, commands = parsed_response
         LOGGER.info('Action: %s', action)
         LOGGER.info('Commands: %s', commands)
+        
+        action = 'refactor'
 
         if action == 'refactor':
-            refactor.call(llm=LLM)
+            refactor.call(llm=LLM, logger=LOGGER)
         elif action == 'exit':
             LOGGER.info('Exiting...')
             break
