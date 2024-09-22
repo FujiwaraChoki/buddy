@@ -36,16 +36,13 @@ def main():
             continue
 
         action, commands = parsed_response
-        LOGGER.info('Action: %s', action)
-        LOGGER.info('Commands: %s', commands)
-        
-        action = 'refactor'
 
         if action == 'refactor':
             refactor.call(llm=LLM, logger=LOGGER)
         elif action == 'exit':
             LOGGER.info('Exiting...')
             break
+
 
 if __name__ == '__main__':
     main()

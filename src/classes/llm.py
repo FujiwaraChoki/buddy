@@ -1,7 +1,8 @@
 import json
 import ollama
 import logging
-import utils.config as c
+import src.utils.config as c
+
 
 class LLM:
     def __init__(self):
@@ -36,7 +37,11 @@ class LLM:
 
     def generate_response(self, save: bool = True, prompt: str = ""):
         try:
-            response = ollama.chat(model=self.model, messages=self.message_history if save else [prompt])
+            response = ollama.chat(model=self.model, messages=self.message_history if save else [{
+                "role": "user",
+                "content": prompt
+            }])
+            print("OLLAMA", response)
             return response.get('message', {}).get('content', '')
         except Exception as e:
             self.logger.error(f"Failed to generate response: {e}")
@@ -59,6 +64,7 @@ class LLM:
             })
             self.logger.debug(f"System prompt inserted: {self.message_history[0]}")
             self.save_message_history()
+
         if save:
             self._add_message_to_history({
                 'role': 'user',
@@ -73,5 +79,4 @@ class LLM:
                 'content': response
             })
         
-        self.logger.info('Response: %s', response)
         return response
