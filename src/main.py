@@ -6,7 +6,7 @@ import actions.refactor as refactor
 
 def main():
     LOGGER = logging.getLogger(__name__)
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG)
 
     STT = stt.SpeechToText()
     LLM = llm.LLM()

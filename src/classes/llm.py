@@ -1,7 +1,7 @@
 import json
 import ollama
 import logging
-import src.utils.config as c
+import utils.config as c
 
 
 class LLM:
@@ -41,8 +41,7 @@ class LLM:
                 "role": "user",
                 "content": prompt
             }])
-            print("OLLAMA", response)
-            return response.get('message', {}).get('content', '')
+            return response.get('message').get('content')
         except Exception as e:
             self.logger.error(f"Failed to generate response: {e}")
             return ''
