@@ -3,6 +3,7 @@ import classes.stt as stt
 import classes.llm as llm
 import classes.parser as parser
 import actions.refactor as refactor
+import actions.install as install
 
 def main():
     LOGGER = logging.getLogger(__name__)
@@ -39,6 +40,8 @@ def main():
 
         if action == 'refactor':
             refactor.call(llm=LLM, logger=LOGGER)
+        elif action == 'install':
+            install.call(llm=LLM, logger=LOGGER)
         elif action == 'exit':
             LOGGER.info('Exiting...')
             break
