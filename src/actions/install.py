@@ -38,7 +38,7 @@ def list_all_files(directory=""):
     for root, dirs, files in os.walk(directory):
         for file in files:
             file_path = os.path.join(root, file)
-            if not should_ignore(file_path):  # Skip files that match the ignore list
+            if not should_ignore(file_path):
                 add_file(file_path)
                 
     return file_list
@@ -49,7 +49,6 @@ def call(llm: LLM = None, logger: logging.Logger = None):
     config = c.load_config()
     project_path = config.get("project").get("path")
     
-    # Comma separated files
     cs_files = ", ".join(list_all_files(project_path))
     
     prompt = config.get("llm").get("base_prompt_for_installation") \
@@ -60,31 +59,42 @@ def call(llm: LLM = None, logger: logging.Logger = None):
     logger.debug(f"Using following prompt to install dependencies: {prompt}")
     
     rspns = llm.ask(prompt=prompt, save=False)
-    to_json = funcs.extract_json_array(rspns)
+    to_json = json.loads(funcs.extract_json_array(rspns))
     
     command_results = []
     
-    # Go through each command and save result and status code
-    for command in to_json:
-        try:
-            logger.debug(f"Executing command: {command}")
-            
-            result = os.system(command)
-            
-            # Save command result with status and output
-            command_results.append({
-                "command": command,
-                "return_code": result
-            })
-            
-            if result.returncode != 0:
-                logger.error(f"Command failed: {command} \nError: {result.stderr}")
-            else:
-                logger.info(f"Command succeeded: {command}")
+    if type(to_json) == list:
+        for command in to_json:
+            try:
+                logger.debug(f"Executing command: {command}")
                 
-        except Exception as error:
-            logger.error(f"Failed to execute command: {command}. Error: {error}")
-
+                result = os.system(command)
+                
+                command_results.append({
+                    "command": command,
+                    "return_code": result
+                })
+                
+                if result != 0:
+                    logger.error(f"Command failed: {command} \nError: {result.stderr}")
+                else:
+                    logger.info(f"Command succeeded: {command}")
+                    
+            except Exception as error:
+                logger.error(f"Failed to execute command: {command}. Error: {error}")
+    else:
+        logger.debug(f"Executing command: {to_json}")
+        result = os.system(to_json)
+        
+        command_results.append({
+            "command": to_json,
+            "return_code": result
+        })
+        
+        if result != 0:
+            logger.error(f"Command failed: {to_json} \nError: {result.stderr}")
+        else:
+            logger.info(f"Command succeeded: {to_json}")
 
     # Log final result of all commands
     logger.debug(f"All commands executed. Results: {command_results}")
