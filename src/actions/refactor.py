@@ -80,8 +80,7 @@ def call(llm: LLM = None, logger: logging.Logger = None):
             .replace("{{CODE}}", file_contents)
         rspns = llm.ask(prompt=altered_prompt_for_refactor, save=False)
         if not file.endswith(".md") \
-            or file.endswith(".html") \
-            or file.endswith(".mdx"):
+            or not file.endswith(".mdx"):
             rspns = funcs.extract_markdown_code(rspns)
         logger.info(rspns)
         

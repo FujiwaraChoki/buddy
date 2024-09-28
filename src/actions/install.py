@@ -1,24 +1,12 @@
 import os
 import json
 import logging
-import platform
 import subprocess
 import utils.config as c
 import classes.llm as LLM
 import utils.funcs as funcs
 
-def get_device_information():
-    # Returns basic device information
-    device_info = {
-        "os": platform.system(),
-        "os_version": platform.version(),
-        "machine": platform.machine(),
-        "processor": platform.processor(),
-    }
-    return json.dumps(device_info, indent=4)
-
 def list_all_files(directory=""):
-    # Lists all files in a directory, recursively, except the ones mentioned in the c['ignore-files'] array
     file_list = []
     ignore_files = c.load_config().get("ignore-files", [])
 
@@ -42,14 +30,6 @@ def list_all_files(directory=""):
 
     return file_list
 
-def get_shell_command():
-    current_os = platform.system()
-    
-    if current_os == "Windows":
-        return ["cmd.exe"]
-    else:
-        return ["/bin/bash"]
-
 def call(llm: LLM = None, logger: logging.Logger = None):
     logger.debug("Calling Install.")
     
@@ -61,7 +41,7 @@ def call(llm: LLM = None, logger: logging.Logger = None):
     prompt = config.get("llm").get("base_prompt_for_installation") \
         .replace("{{PROJECT}}", project_path) \
         .replace("{{FILES}}", cs_files) \
-        .replace("{{INFO}}", get_device_information())
+        .replace("{{INFO}}", funcs.get_device_information())
         
     logger.debug(f"Using the following prompt to install dependencies: {prompt}")
     
@@ -70,7 +50,7 @@ def call(llm: LLM = None, logger: logging.Logger = None):
     
     command_results = []
     
-    shell_command = get_shell_command()
+    shell_command = funcs.get_shell_command()
     
     with subprocess.Popen(shell_command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as session:
         if shell_command == ["cmd.exe"]:
@@ -83,11 +63,9 @@ def call(llm: LLM = None, logger: logging.Logger = None):
                 try:
                     logger.debug(f"Executing command: {command}")
                     
-                    # Execute each command in the persistent session
                     session.stdin.write(f"{command}\n")
                     session.stdin.flush()
                     
-                    # Read the output of the command
                     output, error = session.communicate()
                     
                     command_results.append({

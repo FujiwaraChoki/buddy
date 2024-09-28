@@ -1,9 +1,14 @@
 import logging
+
 import classes.stt as stt
 import classes.llm as llm
 import classes.parser as parser
+
+import actions.git as git
 import actions.refactor as refactor
 import actions.install as install
+
+BY_SPEECH = False
 
 def main():
     LOGGER = logging.getLogger(__name__)
@@ -18,11 +23,14 @@ def main():
         return
 
     while True:
-        try:
-            text = STT.transcribe(duration=3)
-        except Exception as e:
-            LOGGER.error('Could not transcribe speech: %s', e)
-            continue
+        if BY_SPEECH:
+            try:
+                text = STT.transcribe(duration=3)
+            except Exception as e:
+                LOGGER.error('Could not transcribe speech: %s', e)
+                continue
+        else:
+            text = input("What would you like to do? ")
         response = LLM.ask(prompt=text, save=True)
 
         if not response:
@@ -36,12 +44,14 @@ def main():
             LOGGER.error('Failed to parse response. Please try again.')
             continue
 
-        action = parsed_response
+        action, context = parsed_response
 
         if action == 'refactor':
             refactor.call(llm=LLM, logger=LOGGER)
         elif action == 'install':
             install.call(llm=LLM, logger=LOGGER)
+        elif action == 'git':
+            git.call(llm=LLM, logger=LOGGER, additional_context=context)
         elif action == 'exit':
             LOGGER.info('Exiting...')
             break
