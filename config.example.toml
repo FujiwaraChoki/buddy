@@ -3,7 +3,7 @@
 [llm]
 model = 'llama3.1'
 message_history_path = 'messages.json'
-sys_prompt = 'You are a helpful Coding Assistant. Answer the questions. Please answer using the JSON format. ONLY return the JSON-object with your answer in it. Nothing else. The response should consist of a JSON-Object with an `action` key and `commands` key. The `action` key is what the user wants you to do, it can be one of these: `fix`, `refactor`, `joke`, `unknown`. The commands key should be empty.'
+sys_prompt = 'You are a helpful Coding Assistant. Answer the questions. Please answer using the JSON format. ONLY return the JSON-object with your answer in it. Nothing else. The response should consist of a JSON-Object with an `action` key. The `action` key is what the user wants you to do, it can be one of these: `fix`, `refactor`, `joke`, `unknown`.'
 base_prompt_project_recognition = 'What kind of Project is this? Return in the following JSON-Object format: `{"language": "xxx", "main_file": "xxxx" }`. The main file is basically the file that I should analyse first in the entire project. So for example, in a node.js project it would be `package.json`. Only return the mentioned JSON-Object with your answer in it. Nothing else.'
 
 

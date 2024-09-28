@@ -64,6 +64,5 @@ Then, buddy goes through the following steps:
 
 1. Let user set current project through CLI
 2. Record voice
-3. Split into action and commands
+3. Split into action
    - Possible Actions: [`git`, `files`, `run`, `test`, `install`, `help`, `refactor`, `debug`, `other`]
-   - Possible Commands: [Specific to the action]

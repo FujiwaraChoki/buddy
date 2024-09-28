@@ -36,7 +36,7 @@ def main():
             LOGGER.error('Failed to parse response. Please try again.')
             continue
 
-        action, commands = parsed_response
+        action = parsed_response
 
         if action == 'refactor':
             refactor.call(llm=LLM, logger=LOGGER)

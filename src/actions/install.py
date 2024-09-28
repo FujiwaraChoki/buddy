@@ -17,7 +17,6 @@ def get_device_information():
     }
     return json.dumps(device_info, indent=4)
 
-
 def list_all_files(directory=""):
     # Lists all files in a directory, recursively, except the ones mentioned in the c['ignore-files'] array
     file_list = []
@@ -40,8 +39,16 @@ def list_all_files(directory=""):
             file_path = os.path.join(root, file)
             if not should_ignore(file_path):
                 add_file(file_path)
-                
+
     return file_list
+
+def get_shell_command():
+    current_os = platform.system()
+    
+    if current_os == "Windows":
+        return ["cmd.exe"]
+    else:
+        return ["/bin/bash"]
 
 def call(llm: LLM = None, logger: logging.Logger = None):
     logger.debug("Calling Install.")
@@ -56,47 +63,69 @@ def call(llm: LLM = None, logger: logging.Logger = None):
         .replace("{{FILES}}", cs_files) \
         .replace("{{INFO}}", get_device_information())
         
-    logger.debug(f"Using following prompt to install dependencies: {prompt}")
+    logger.debug(f"Using the following prompt to install dependencies: {prompt}")
     
     rspns = llm.ask(prompt=prompt, save=False)
     to_json = json.loads(funcs.extract_json_array(rspns))
     
     command_results = []
     
-    if type(to_json) == list:
-        for command in to_json:
+    shell_command = get_shell_command()
+    
+    with subprocess.Popen(shell_command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True) as session:
+        if shell_command == ["cmd.exe"]:
+            session.stdin.write(f"cd /d {project_path}\n")
+        else:
+            session.stdin.write(f"cd {project_path}\n")
+        
+        if type(to_json) == list:
+            for command in to_json:
+                try:
+                    logger.debug(f"Executing command: {command}")
+                    
+                    # Execute each command in the persistent session
+                    session.stdin.write(f"{command}\n")
+                    session.stdin.flush()
+                    
+                    # Read the output of the command
+                    output, error = session.communicate()
+                    
+                    command_results.append({
+                        "command": command,
+                        "output": output,
+                        "error": error
+                    })
+                    
+                    if error:
+                        logger.error(f"Command failed: {command} \nError: {error}")
+                    else:
+                        logger.info(f"Command succeeded: {command}")
+                        
+                except Exception as error:
+                    logger.error(f"Failed to execute command: {command}. Error: {error}")
+        else:
             try:
-                logger.debug(f"Executing command: {command}")
+                logger.debug(f"Executing command: {to_json}")
                 
-                result = os.system(command)
+                session.stdin.write(f"{to_json}\n")
+                session.stdin.flush()
+                
+                output, error = session.communicate()
                 
                 command_results.append({
-                    "command": command,
-                    "return_code": result
+                    "command": to_json,
+                    "output": output,
+                    "error": error
                 })
                 
-                if result != 0:
-                    logger.error(f"Command failed: {command} \nError: {result.stderr}")
+                if error:
+                    logger.error(f"Command failed: {to_json} \nError: {error}")
                 else:
-                    logger.info(f"Command succeeded: {command}")
+                    logger.info(f"Command succeeded: {to_json}")
                     
             except Exception as error:
-                logger.error(f"Failed to execute command: {command}. Error: {error}")
-    else:
-        logger.debug(f"Executing command: {to_json}")
-        result = os.system(to_json)
-        
-        command_results.append({
-            "command": to_json,
-            "return_code": result
-        })
-        
-        if result != 0:
-            logger.error(f"Command failed: {to_json} \nError: {result.stderr}")
-        else:
-            logger.info(f"Command succeeded: {to_json}")
+                logger.error(f"Failed to execute command: {to_json}. Error: {error}")
 
-    # Log final result of all commands
     logger.debug(f"All commands executed. Results: {command_results}")
     
     return command_results

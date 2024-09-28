@@ -13,6 +13,5 @@ class Parser:
         to_json = json.loads(text.strip())
                 
         action = to_json.get("action")
-        commands = to_json.get("commands")
         
-        return action, commands
+        return action
