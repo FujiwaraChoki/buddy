@@ -35,7 +35,7 @@ If you don't have it installed, download it from [here](https://ollama.com/).
 
 Run the necessary models:
 
-````bash
+```bash
 ollama run llava:13b # Vision Model
 ollama run llama3.1 # Text Generation (LLM) Model
 ```
@@ -44,7 +44,7 @@ Next, you'll need to set your project through the command line tool.
 
 ```bash
 python3 src/set_project.py [PROJECT_PATH]
-````
+```
 
 `[PROJECT_PATH]` is the path to your project. You can also provide a relative path, as it will be converted into an absolute one in all cases.
 
