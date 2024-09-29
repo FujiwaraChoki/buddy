@@ -6,32 +6,6 @@ import classes.llm as LLM
 import utils.funcs as funcs
 
 
-def list_all_files(directory=""):
-    # Lists all files in a directory, recursively, except the ones mentioned in the c['ignore-files'] array
-    file_list = []
-    ignore_files = c.load_config().get("ignore-files", [])
-
-    def should_ignore(file_path):
-        for ignored in ignore_files:
-            if "extension" in ignored and file_path.endswith(ignored["extension"]):
-                return True
-            if "name" in ignored and ignored["name"] in file_path:
-                return True
-        return False
-
-    def add_file(path):
-        if path not in file_list:
-            file_list.append(path)
-
-    for root, dirs, files in os.walk(directory):
-        for file in files:
-            file_path = os.path.join(root, file)
-            if not should_ignore(file_path):  # Skip files that match the ignore list
-                add_file(file_path)
-
-    return file_list
-
-
 def call(llm: LLM = None, logger: logging.Logger = None):
     logger.info("Calling Refactor.")
 
@@ -41,7 +15,7 @@ def call(llm: LLM = None, logger: logging.Logger = None):
     project = config.get("project").get("path")
 
     # Comma separated files (from func above)
-    cs_files = ", ".join(list_all_files(project))
+    cs_files = ", ".join(funcs.list_all_files(c, project))
 
     altered_prompt = config.get('llm').get('base_prompt_project_recognition') \
         .replace("{{PROJECT_NAME}}", project) \
@@ -70,6 +44,8 @@ def call(llm: LLM = None, logger: logging.Logger = None):
     
     files_in_json_response = llm.ask(prompt=altered_prompt_asking_about_main_file, save=False)
     files_in_json_response = json.loads(funcs.extract_json_array(funcs.clean(files_in_json_response)))
+        
+    ask = config.get("app").get("ask_before_refactoring")
     
     for file in files_in_json_response:
         logger.debug(f"===== REFACTORING FILE {file} START =====")
@@ -84,15 +60,20 @@ def call(llm: LLM = None, logger: logging.Logger = None):
             rspns = funcs.extract_markdown_code(rspns)
         logger.info(rspns)
         
-        choice = input("Replace file (y/N): ")
-        
-        if choice.lower() == "y":
+        if ask:
+            choice = input("Replace file (y/N): ")
+            
+            if choice.lower() == "y":
+                logger.info(f"Replacing contents for file {file}")
+                with open(os.path.join(project, file), "w") as f:
+                    f.write(rspns)
+            else:
+                logger.info(f"Skipping {file}")
+                continue
+        else:
             logger.info(f"Replacing contents for file {file}")
             with open(os.path.join(project, file), "w") as f:
                 f.write(rspns)
-        else:
-            logger.info(f"Skipping {file}")
-            continue
         
         logger.debug(f"===== REFACTORING FILE {file} FINISH =====")
 

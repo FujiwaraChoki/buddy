@@ -6,6 +6,8 @@ import classes.llm as llm
 import classes.parser as parser
 
 import actions.git as git
+import actions.run as run
+import actions.joke as joke
 import actions.install as install
 import actions.refactor as refactor
 import actions.question as question
@@ -20,8 +22,6 @@ def main():
     LLM = llm.LLM()
     PARSER = parser.Parser()
     
-    
-
     if not STT:
         LOGGER.error('STT class cannot be uninstantiated. Please try again.')
         return
@@ -58,10 +58,13 @@ def main():
             git.call(llm=LLM, logger=LOGGER, additional_context=context)
         elif action == 'question':
             question.call(llm=LLM, logger=LOGGER, additional_context=context)
+        elif action == 'run':
+            run.call(llm=LLM, logger=LOGGER)
+        elif action == 'joke':
+            joke.call(llm=LLM, logger=LOGGER, additional_context=context)
         elif action == 'exit':
             LOGGER.info('Exiting...')
             break
-
 
 if __name__ == '__main__':
     main()
