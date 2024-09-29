@@ -1,4 +1,5 @@
 import logging
+import asyncio
 
 import classes.stt as stt
 import classes.llm as llm
@@ -11,6 +12,11 @@ import actions.install as install
 import actions.refactor as refactor
 import actions.question as question
 
+import utils.config as c
+import utils.funcs as funcs
+
+from playsound import playsound
+
 BY_SPEECH = False
 
 def main():
@@ -20,6 +26,11 @@ def main():
     STT = stt.SpeechToText()
     LLM = llm.LLM()
     PARSER = parser.Parser()
+    
+    voice = c.load_config().get("tts").get("voice")
+    audio_file_name = asyncio.run(funcs.generate_audio("How can I help you today?", voice))
+    
+    playsound(audio_file_name)
     
     if not STT:
         LOGGER.error('STT class cannot be uninstantiated. Please try again.')
