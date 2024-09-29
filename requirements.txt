@@ -1,7 +1,10 @@
 speechrecognition
 setuptools
 soundfile
+playsound
+edge-tts
 pyaudio
 ollama
 torch
 numpy
+toml

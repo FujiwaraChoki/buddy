@@ -3,6 +3,7 @@ import ollama
 import logging
 import utils.config as c
 
+
 class LLM:
     def __init__(self):
         config = c.load_config()
@@ -34,10 +35,13 @@ class LLM:
         except Exception as e:
             self.logger.error(f"Failed to save message history: {e}")
 
-    def _generate_response(self):
+    def generate_response(self, save: bool = True, prompt: str = ""):
         try:
-            response = ollama.chat(model=self.model, messages=self.message_history)
-            return response.get('message', {}).get('content', '')
+            response = ollama.chat(model=self.model, messages=self.message_history if save else [{
+                "role": "user",
+                "content": prompt
+            }])
+            return response.get('message').get('content')
         except Exception as e:
             self.logger.error(f"Failed to generate response: {e}")
             return ''
@@ -50,8 +54,8 @@ class LLM:
         except Exception as e:
             self.logger.error(f"Failed to save message history: {e}")
 
-    def _ask(self, prompt: str = ''):
-        if not self.message_history:
+    def ask(self, prompt: str = '', save: bool = True):
+        if not self.message_history and save:
             self.logger.info('Message history is empty, adding System Prompt.')
             self.message_history.insert(0, {
                 'role': 'system',
@@ -59,18 +63,19 @@ class LLM:
             })
             self.logger.debug(f"System prompt inserted: {self.message_history[0]}")
             self.save_message_history()
+
+        if save:
+            self._add_message_to_history({
+                'role': 'user',
+                'content': prompt
+            })
         
-        self._add_message_to_history({
-            'role': 'user',
-            'content': prompt
-        })
+        response = self.generate_response(save=save, prompt=prompt)
         
-        response = self._generate_response()
+        if save:
+            self._add_message_to_history({
+                'role': 'assistant',
+                'content': response
+            })
         
-        self._add_message_to_history({
-            'role': 'assistant',
-            'content': response
-        })
-        
-        self.logger.info('Response: %s', response)
         return response

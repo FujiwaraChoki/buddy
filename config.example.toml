@@ -1,6 +1,74 @@
 # Configuration for Coding Buddy.
 
 [llm]
-model='llama3.1'
-sys_prompt='You are a helpful assistant, make sure to respectfully answer the users questions.'
-message_history_path='messages.json'
+model = 'llama3.1'
+message_history_path = 'messages.json'
+sys_prompt = 'You are a helpful Coding Assistant. Answer the questions. Please answer using the JSON format. ONLY return the JSON-object with your answer in it. Nothing else. The response should consist of a JSON-Object with an `action` key. The `action` key is what the user wants you to do, it can be one of these: `fix`, `refactor`, `joke`, `unknown`.'
+base_prompt_project_recognition = 'What kind of Project is this? Return in the following JSON-Object format: `{"language": "xxx", "main_file": "xxxx" }`. The main file is basically the file that I should analyse first in the entire project. So for example, in a node.js project it would be `package.json`. Only return the mentioned JSON-Object with your answer in it. Nothing else.'
+
+
+[[ignore-files]]
+name = "node_modules" # Node.js dependencies
+
+[[ignore-files]]
+name = "package-lock.json" # Node.js lock file
+
+[[ignore-files]]
+name = "dist" # Distribution folder for built projects
+
+[[ignore-files]]
+name = "build" # General build folder
+
+[[ignore-files]]
+name = ".next" # Next.js build directory
+
+[[ignore-files]]
+name = "target" # Rust build folder
+
+[[ignore-files]]
+name = "__pycache__" # Python bytecode cache
+
+[[ignore-files]]
+name = "env" # Python virtual environment (commonly named)
+
+[[ignore-files]]
+name = "venv" # Another common Python virtual environment name
+
+[[ignore-files]]
+name = "bin" # Common folder for binaries in C/C++ projects
+
+[[ignore-files]]
+name = "obj" # Object files in C/C++ builds
+
+[[ignore-files]]
+name = ".gradle" # Gradle build files for Java projects
+
+[[ignore-files]]
+name = "build.gradle" # Gradle build script
+
+[[ignore-files]]
+name = "CMakeFiles" # CMake build folder
+
+[[ignore-files]]
+name = "CMakeCache.txt" # CMake cache file
+
+[[ignore-files]]
+name = "yarn.lock" # Yarn lock file for Node.js
+
+[[ignore-files]]
+name = "pip-log.txt" # Python pip log file
+
+[[ignore-files]]
+name = ".pytest_cache" # Cache from Python pytest
+
+[[ignore-files]]
+name = ".mypy_cache" # Cache from Python mypy type checker
+
+[[ignore-files]]
+name = ".coverage" # Coverage reports
+
+[[ignore-files]]
+name = ".vscode" # Visual Studio Code settings
+
+[[ignore-files]]
+name = "log" # Logs generated during runtime

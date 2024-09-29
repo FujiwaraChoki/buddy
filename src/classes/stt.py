@@ -20,7 +20,7 @@ class SpeechToText:
                         return text
                 except Exception as e:
                     self._logger.error(f"Error during transcription: {e}")
-                time.sleep(3)  # Adjust sleep time as needed
+                time.sleep(3)
         else:
             return self._employ_speech_to_text(duration=duration)
 
@@ -34,7 +34,6 @@ class SpeechToText:
                 text = self._recognizer.recognize_google(audio)
 
                 if not text:
-                    self._logger.info('No speech detected. Re-recording...')
                     return self._employ_speech_to_text(duration=duration)
 
                 self._logger.info('Transcription: %s', text)
