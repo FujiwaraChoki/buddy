@@ -1,74 +1,113 @@
-# Configuration for Coding Buddy.
+# Coding Buddy Configuration
+
+[[ignore-files]]
+name = "node_modules"
+
+[[ignore-files]]
+name = "package-lock.json"
+
+[[ignore-files]]
+name = "dist"
+
+[[ignore-files]]
+name = "build"
+
+[[ignore-files]]
+name = ".next"
+
+[[ignore-files]]
+name = "target"
+
+[[ignore-files]]
+name = "__pycache__"
+
+[[ignore-files]]
+name = "env"
+
+[[ignore-files]]
+name = "venv"
+
+[[ignore-files]]
+name = "bin"
+
+[[ignore-files]]
+name = "obj"
+
+[[ignore-files]]
+name = ".gradle"
+
+[[ignore-files]]
+name = "build.gradle"
+
+[[ignore-files]]
+name = "CMakeFiles"
+
+[[ignore-files]]
+name = "CMakeCache.txt"
+
+[[ignore-files]]
+name = "yarn.lock"
+
+[[ignore-files]]
+name = "pip-log.txt"
+
+[[ignore-files]]
+name = ".pytest_cache"
+
+[[ignore-files]]
+name = ".mypy_cache"
+
+[[ignore-files]]
+name = ".coverage"
+
+[[ignore-files]]
+name = ".vscode"
+
+[[ignore-files]]
+name = "log"
+
+[[ignore-files]]
+name = ".git"
+
+[[ignore-files]]
+extension = ".png"
+
+[[ignore-files]]
+extension = ".exe"
+
+[[ignore-files]]
+extension = ".md"
+
+[tts]
+
+voice = "en-GB-SoniaNeural"
 
 [llm]
-model = 'llama3.1'
-message_history_path = 'messages.json'
-sys_prompt = 'You are a helpful Coding Assistant. Answer the questions. Please answer using the JSON format. ONLY return the JSON-object with your answer in it. Nothing else. The response should consist of a JSON-Object with an `action` key. The `action` key is what the user wants you to do, it can be one of these: `fix`, `refactor`, `joke`, `unknown`.'
-base_prompt_project_recognition = 'What kind of Project is this? Return in the following JSON-Object format: `{"language": "xxx", "main_file": "xxxx" }`. The main file is basically the file that I should analyse first in the entire project. So for example, in a node.js project it would be `package.json`. Only return the mentioned JSON-Object with your answer in it. Nothing else.'
 
+base_prompt_project_recognition = "What kind of Project is this? Answer this question, in the following JSON-Object format: `{'language': 'xxx', 'main_file': 'xxxx' }`. The main file is basically the file that I should analyse first in the entire project. So for example, in a node.js project it would be `package.json`. Only return the mentioned JSON-Object with your answer in it. Nothing else. Path of the Project: {{PROJECT_NAME}}. Here is the list of files in the Project: {{FILES}} ALWAYS use double-quotes for enclosing."
 
-[[ignore-files]]
-name = "node_modules" # Node.js dependencies
+base_prompt_read_main_file = "I have a piece of code and a list of files and a project name. Depending on the piece of code (which if the main file of the project) and the list of files, return the order of the files in which they should be looked at. Return them as a JSON-Array of strings, which are the file names. Only as that, nothing else. Project Name: {{PROJECT_NAME}}. List of files: {{FILES}}. Code: {{CODE}}. The name of the file which contains the contents above is {{FILE_NAME}} by the way and is written in {{LANGUAGE}}. ALWAYS use double-quotes for enclosing. ONLY return the JSON array. Nothing Else."
 
-[[ignore-files]]
-name = "package-lock.json" # Node.js lock file
+base_prompt_refactor_code = "I have a piece of code (or Documentation) written in the language of {{LANGUAGE}}. The Project's name/path is {{PROJECT}}. I want you to refactor the piece of code to not include any bugs, and make it utilize coding standards. This is the code: {{CODE}}. ONLY return the refactored code, nothing else."
 
-[[ignore-files]]
-name = "dist" # Distribution folder for built projects
+model = "llama3.1"
 
-[[ignore-files]]
-name = "build" # General build folder
+base_prompt_for_installation = "I have the Project '{{PROJECT}}' and I would like to install the dependencies. Make sure to only provide the commands which are compatible with the native shell of my Operating System. For example, Bash for Linux, CMD for Windows, and ZSH for MacOS. Also, only do commands that actually have something to do with the application, not some random thing you kind of . Please do so by anaylzing the directory and returning a set of Commands which I should execute on my system. Return them as a JSON-Array of Strings, without anything additional. Here are all the files in my directory: {{FILES}}. If no dependencies seem to be need to installed or if any of the commands fail, just print/echo 'Youre good! :)'. Here is some basic device information: {{INFO}}. Here I am warning you again. Do NOT return anything other than a JSON-array of Strings."
 
-[[ignore-files]]
-name = ".next" # Next.js build directory
+base_prompt_for_git = "I have the Project '{{PROJECT}}' and I need to execute some git commands. Here is some information about my system: {{INFO}}. Give me the necessary git commands back in the default shell language of the appropriate operating system. For example, CMD for Windows, Bash for linux, etc. . Return the commands to me in form of a JSON-Array of Strings (which are the commands). Only return the JSON-Array as your ENTIRE response, do not add any additional text whatsoever. Here is some additional context for you by the way: {{CONTEXT}}. The context could include the commit message wanted by the user for example. It doesnt have to be that necessarliy. NEVER INCLUDE A COMMAND THAT CONFIGURES GIT. Always use double quotes for commit messages. Only add the necessary commands. Also, NEVER ALTER ANY TYPE OF FILE."
 
-[[ignore-files]]
-name = "target" # Rust build folder
+base_prompt_for_question = "Do not use ANY type of Markdown formatting. Simply reply with raw text. Answer the following question: {{QUESTION}}.."
 
-[[ignore-files]]
-name = "__pycache__" # Python bytecode cache
+base_prompt_for_running = "Do not use ANY type of Markdown formatting. Reply with a JSON-Array of Strings. The strings should be the commands necessary for running an application for development purposes, described the following way: The App's name is: {{PROJECT}}, it contains these files: {{FILES}}. It is written in the programming language {{LANGUAGE}}. These are the content's of {{MAIN_FILE}}: {{MAIN_FILE_CONTENTS}}. Here is some basic information about my system: {{INFO}}. Now respond with the JSON-Array of Strings. Do not make them objects. Simply return an array of commands for my system."
 
-[[ignore-files]]
-name = "env" # Python virtual environment (commonly named)
+base_prompt_for_joke = "Tell me ONE satire joke. Do not use any type of formatting like Markdown, simply reply with raw text."
 
-[[ignore-files]]
-name = "venv" # Another common Python virtual environment name
+sys_prompt = "You are a helpful Coding Assistant. Answer the questions. Please answer using the JSON format. ONLY return the JSON-object with your answer in it. Nothing else. The response should consist of a JSON-Object with an `action` key and `context` key. The `action` key is what the user wants you to do, it can be one of these: `refactor`, `joke`, `install`, `git`, `run`, `question`, `unknown`. Any type of Questions should have the question action. A question could also be explanation. The context key should be any necessary additional context provided by the user. ALWAYS use double-quotes for enclosing. Do NOT concatenate commands. Make them separate."
 
-[[ignore-files]]
-name = "bin" # Common folder for binaries in C/C++ projects
+message_history_path = "messages.json"
 
-[[ignore-files]]
-name = "obj" # Object files in C/C++ builds
+[project]
+path = "" # Use src/set_project for this purpose.
 
-[[ignore-files]]
-name = ".gradle" # Gradle build files for Java projects
-
-[[ignore-files]]
-name = "build.gradle" # Gradle build script
-
-[[ignore-files]]
-name = "CMakeFiles" # CMake build folder
-
-[[ignore-files]]
-name = "CMakeCache.txt" # CMake cache file
-
-[[ignore-files]]
-name = "yarn.lock" # Yarn lock file for Node.js
-
-[[ignore-files]]
-name = "pip-log.txt" # Python pip log file
-
-[[ignore-files]]
-name = ".pytest_cache" # Cache from Python pytest
-
-[[ignore-files]]
-name = ".mypy_cache" # Cache from Python mypy type checker
-
-[[ignore-files]]
-name = ".coverage" # Coverage reports
-
-[[ignore-files]]
-name = ".vscode" # Visual Studio Code settings
-
-[[ignore-files]]
-name = "log" # Logs generated during runtime
+[choices]
+ask_before_refactoring = true # This will ask before doing any changes while refactoring a project
