@@ -297,4 +297,6 @@ pyrightconfig.json
 config.toml
 messages.json
 
+*.mp3s
+
 # End of https://www.toptal.com/developers/gitignore/api/python,jetbrains+all,git,visualstudiocode
