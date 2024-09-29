@@ -6,7 +6,7 @@ import classes.llm as LLM
 import utils.funcs as funcs
 
 
-def call(llm: LLM = None, logger: logging.Logger = None):
+def call(llm: LLM = None, logger: logging.Logger = None, additional_context: str = ""):
     logger.info("Calling Refactor.")
 
     config = c.load_config()
@@ -53,7 +53,9 @@ def call(llm: LLM = None, logger: logging.Logger = None):
         altered_prompt_for_refactor = config.get("llm").get("base_prompt_refactor_code") \
             .replace("{{PROJECT}}", project) \
             .replace("{{LANGUAGE}}", file.split(".")[-1]) \
+            .replace("{{CONTEXT}}", additional_context) \
             .replace("{{CODE}}", file_contents)
+
         rspns = llm.ask(prompt=altered_prompt_for_refactor, save=False)
         if not file.endswith(".md") \
             or not file.endswith(".mdx"):

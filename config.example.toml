@@ -88,7 +88,7 @@ base_prompt_project_recognition = "What kind of Project is this? Answer this que
 
 base_prompt_read_main_file = "I have a piece of code and a list of files and a project name. Depending on the piece of code (which if the main file of the project) and the list of files, return the order of the files in which they should be looked at. Return them as a JSON-Array of strings, which are the file names. Only as that, nothing else. Project Name: {{PROJECT_NAME}}. List of files: {{FILES}}. Code: {{CODE}}. The name of the file which contains the contents above is {{FILE_NAME}} by the way and is written in {{LANGUAGE}}. ALWAYS use double-quotes for enclosing. ONLY return the JSON array. Nothing Else."
 
-base_prompt_refactor_code = "I have a piece of code (or Documentation) written in the language of {{LANGUAGE}}. The Project's name/path is {{PROJECT}}. I want you to refactor the piece of code to not include any bugs, and make it utilize coding standards. This is the code: {{CODE}}. ONLY return the refactored code, nothing else."
+base_prompt_refactor_code = "I have a piece of code (or Documentation) written in the language of {{LANGUAGE}}. The Project's name/path is {{PROJECT}}. I want you to refactor the piece of code to not include any bugs, and make it utilize coding standards. This is the code: {{CODE}}. ONLY return the refactored code, nothing else. Here is some additional context: {{CONTEXT}}"
 
 model = "llama3.1"
 

@@ -12,7 +12,6 @@ class LLM:
         self.sys_prompt = config['llm']['sys_prompt']
         self.logger = logging.getLogger(__name__)
         self.message_history = self._load_message_history()
-        self.logger.debug(f"Initial message history loaded: {self.message_history}")
 
     def _load_message_history(self):
         self.logger.info('Loading message history...')
@@ -26,12 +25,10 @@ class LLM:
 
     def _add_message_to_history(self, message):
         self.message_history.append(message)
-        self.logger.debug(f"Message added to history: {message}")
         
         try:
             with open(self.message_history_path, 'w') as f:
                 json.dump(self.message_history, f)
-                self.logger.debug(f"Message history saved: {self.message_history}")
         except Exception as e:
             self.logger.error(f"Failed to save message history: {e}")
 

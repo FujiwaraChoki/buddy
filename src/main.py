@@ -1,4 +1,3 @@
-import os
 import logging
 
 import classes.stt as stt
@@ -16,7 +15,7 @@ BY_SPEECH = False
 
 def main():
     LOGGER = logging.getLogger(__name__)
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.INFO)
 
     STT = stt.SpeechToText()
     LLM = llm.LLM()
@@ -51,7 +50,7 @@ def main():
         action, context = parsed_response
 
         if action == 'refactor':
-            refactor.call(llm=LLM, logger=LOGGER)
+            refactor.call(llm=LLM, logger=LOGGER, additional_context=context)
         elif action == 'install':
             install.call(llm=LLM, logger=LOGGER)
         elif action == 'git':
