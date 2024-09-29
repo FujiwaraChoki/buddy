@@ -17,8 +17,6 @@ import utils.funcs as funcs
 
 from playsound import playsound
 
-BY_SPEECH = False
-
 def main():
     LOGGER = logging.getLogger(__name__)
     logging.basicConfig(level=logging.INFO)
@@ -35,6 +33,8 @@ def main():
     if not STT:
         LOGGER.error('STT class cannot be uninstantiated. Please try again.')
         return
+    
+    BY_SPEECH = c.load_config().get("app").get("input_method") == "speech"
 
     while True:
         if BY_SPEECH:

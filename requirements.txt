@@ -1,7 +1,7 @@
 speechrecognition
+playsound==1.2.2
 setuptools
 soundfile
-playsound
 edge-tts
 pyaudio
 ollama
