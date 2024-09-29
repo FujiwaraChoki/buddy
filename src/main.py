@@ -1,3 +1,4 @@
+import os
 import logging
 
 import classes.stt as stt
@@ -5,8 +6,9 @@ import classes.llm as llm
 import classes.parser as parser
 
 import actions.git as git
-import actions.refactor as refactor
 import actions.install as install
+import actions.refactor as refactor
+import actions.question as question
 
 BY_SPEECH = False
 
@@ -17,6 +19,8 @@ def main():
     STT = stt.SpeechToText()
     LLM = llm.LLM()
     PARSER = parser.Parser()
+    
+    
 
     if not STT:
         LOGGER.error('STT class cannot be uninstantiated. Please try again.')
@@ -52,6 +56,8 @@ def main():
             install.call(llm=LLM, logger=LOGGER)
         elif action == 'git':
             git.call(llm=LLM, logger=LOGGER, additional_context=context)
+        elif action == 'question':
+            question.call(llm=LLM, logger=LOGGER, additional_context=context)
         elif action == 'exit':
             LOGGER.info('Exiting...')
             break
