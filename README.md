@@ -1,6 +1,6 @@
 # My Coding Buddy
 
-This Project is designed to keep you company while you're coding. It is not a software-only project, and specific hardware is required in order to run the code in this repository.
+This Project is designed to keep you company while you're coding. It is a software-only project, and no additional hardware is required at the moment (this may change in the future).
 
 ## Install
 
