@@ -53,8 +53,8 @@ python3 src/set_project.py [PROJECT_PATH]
 - [x] Start with modular architecture
 - [x] Record Speech from microphone
 - [x] Make request to local OLLAMA API
-- [ ] Put answers in a JSON response
-  - [ ] Parse and performing the specific action with defined parameters
+- [x] Put answers in a JSON response
+  - [x] Parse and performing the specific action with defined parameters
 
 ## How it works
 
@@ -66,3 +66,9 @@ Then, buddy goes through the following steps:
 2. Record voice
 3. Split into action
    - Possible Actions: [`git`, `files`, `run`, `test`, `install`, `help`, `refactor`, `debug`, `other`]
+4. Calls the actions `call` method (found in [actions](/actions) folder)
+5. Prints Result/says it out loud.
+
+## Contributing
+
+PR's are welcome. :)
